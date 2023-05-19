@@ -1,7 +1,6 @@
-#!/usr/bin/python3
-"""
-Script that starts a Flask web application
-"""
+#!/usr/bin/env python3
+
+"""Script that starts a Flask web application"""
 
 from flask import Flask
 
@@ -11,9 +10,7 @@ app.url_map.strict_slashes = False
 
 @app.route('/')
 def hello_hbnb():
-    """
-    Route that displays 'Hello HBNB!' when accessed
-    """
+    """Print web"""
     return 'Hello HBNB!'
 
 
