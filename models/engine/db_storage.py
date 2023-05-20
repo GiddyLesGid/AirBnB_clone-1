@@ -73,7 +73,7 @@ class DBStorage:
 
     def close(self):
         """close the session"""
-        self.__session.close()
+        self.__session.remove()
 
     def cities(self, state_id):
     """Returns the list of City objects linked to the current State"""
@@ -82,5 +82,4 @@ class DBStorage:
     for obj in self.__session.query(City).all():
         if obj.state_id == state_id:
             cities.append(obj)
-    return cities
- 
+    return cities 
