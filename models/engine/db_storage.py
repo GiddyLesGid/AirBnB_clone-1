@@ -33,18 +33,21 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Returns a dictionary of objects"""
-        dict_obj = {}
-        if cls:
-            for obj in self.__session.query(eval(cls)).all():
+    """Returns a dictionary of objects"""
+    dict_obj = {}
+    if cls:
+        if isinstance(cls, str):
+            cls = eval(cls)
+        for obj in self.__session.query(cls).all():
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            dict_obj[key] = obj
+    else:
+        for subcls in Base.__subclasses__():
+            for obj in self.__session.query(subcls).all():
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 dict_obj[key] = obj
-        else:
-            for subcls in Base.__subclasses__():
-                for obj in self.__session.query(subcls).all():
-                    key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                    dict_obj[key] = obj
-        return dict_obj
+    return dict_obj
+
 
     def new(self, obj):
         """add the object to the current database session"""
