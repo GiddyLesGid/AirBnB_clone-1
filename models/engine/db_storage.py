@@ -36,7 +36,7 @@ class DBStorage:
         """Returns a dictionary of objects"""
         dict_obj = {}
         if cls:
-            for obj in self.__session.query(cls).all():
+            for obj in self.__session.query(eval(cls)).all():
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 dict_obj[key] = obj
         else:
@@ -67,19 +67,10 @@ class DBStorage:
         """
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(
-            bind=self.__engine, expire_on_commit=False)
+                bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
     def close(self):
         """close the session"""
-        self.__session.remove()
-
-    def cities(self, state_id):
-    """Returns the list of City objects linked to the current State"""
-    state_key = "State." + state_id
-    cities = []
-    for obj in self.__session.query(City).all():
-        if obj.state_id == state_id:
-            cities.append(obj)
-    return cities 
+        self.__session.close()
